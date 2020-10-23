@@ -5,6 +5,7 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
+
 const {top50} = require("./data/top50");
 
 express()
@@ -21,14 +22,16 @@ express()
   // Nothing to modify above this line
   // ---------------------------------
   // add new endpoints here 👇
+
   .get('/top50', (req, res) => {
-    const message = { author: 'cat', text: 'Meow' };
 
-    const randomTime = Math.floor(Math.random() * 3000);
+    let data = [...top50];
 
-    setTimeout(() => {
-        res.status(200).json({ status: 200, top50 });
-    }, randomTime);
+    console.log("top50 called");
+
+
+    res.status(200).json({ status: 200, data });
+
 
   })
   .get('/top50/song/:rank', (req, res) => {
@@ -49,15 +52,15 @@ express()
   })
   .get('/top50/artist/:name', (req, res) => {
 
-     const result = top50.filter(song => {
+     const data = top50.filter(song => {
       console.log("filter sng artist", song.artist );
       console.log("req.params.artist", req.params.artist );
       return song.artist.toLowerCase() == req.params.name.toLowerCase()
     })
 
-     if(result.length > 0){
+     if(data.length > 0){
 
-        res.status(200).json({ status: 200, result });
+        res.status(200).json({ status: 200, data });
      }else{
        res.status(404).json({ status: 404, "message" :"Artist not found." });
      }
@@ -65,7 +68,7 @@ express()
 
   })
 
-  .get('/top50/most-popular', (req, res) => {
+  .get('/top50/popular-artist', (req, res) => {
 
      let artist_arr = [];
 
